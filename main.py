@@ -16,6 +16,7 @@ for i in range(n):
 assert len(A) == len(B) and len(A[0]) == len(B[0])
 
 def maxmin(payoff, i):
+    Anp = np.array(payoff)
     # Minimum of each row of payoff matrix (i.e. each strategy of player i)
     minimums_of_player = []
 
@@ -23,12 +24,14 @@ def maxmin(payoff, i):
     for iStrategy in range(n):
         # getting row of ith strategy of player i 
         # (all payoffs corresponding to the strategy i of player i)
-        Ai = payoff[iStrategy]
+        if i == 1: # if player 1, we should consider its row!
+            Ai = Anp[iStrategy]
+        elif i == 2: 
+            Ai = Anp[:, iStrategy] # if player 2, we should consider its column!
         # minimum of those payoffs
         minAi = min(Ai)
         # adding to the min array
         minimums_of_player.append(minAi)
-
     # maximum of minimums
     max_val_player = max(minimums_of_player)
     # saving indices (1-based) of maxmin (i.e. the ith maxmin strategies)
