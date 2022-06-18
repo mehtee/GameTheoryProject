@@ -47,3 +47,45 @@ def maxmin(payoff, i):
 
 maxmin(A, 1)
 maxmin(B, 2)
+
+
+def minmax(payoff, i) -> tuple:
+    Anp = np.array(payoff)
+
+    # Maximum of each row/col of payoff matrix (i.e. each strategy of player i)
+    maximum_of_player = []
+
+    for iStrategy in range(n):
+        # getting row/col of ith strategy of player i 
+        # (all payoffs corresponding to the strategy i of player i)
+
+        if i == 1: # if player 1, we should consider its column!
+            Ai = Anp[:, iStrategy]
+        elif i == 2: # if player 2, we should consider its row!
+            Ai = Anp[iStrategy]
+        
+        # maximum of those payoffs
+        maxAi = max(Ai)
+        # adding to the max array
+        maximum_of_player.append(maxAi)
+
+    # minimum of maximums
+    min_val_player = min(maximum_of_player)
+    # saving indices (1-based) of minmax (i.e. the ith minmax strategies)
+    min_indices = []
+    # search which elements' indices are those of that minmax value:
+    for index, element in enumerate(maximum_of_player):
+            if element == min_val_player:
+                # and appending each of them to the min_indices array
+                min_indices.append(str(index+1))
+    return min_val_player, min_indices
+
+minmax_of_1 = minmax(A, 1)
+minmax_of_2 = minmax(B, 2)
+
+# strategy output of player 1 is the minmax strategy of player 2 and vice-versa
+print("Minmax values and strategy player 1")
+print(minmax_of_1[0], "-", ",".join(minmax_of_2[1]), sep="")
+
+print("Minmax values and strategy player 2")
+print(minmax_of_2[0], "-", ",".join(minmax_of_1[1]), sep="")
