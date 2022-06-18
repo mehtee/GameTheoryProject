@@ -1,5 +1,7 @@
 from cmath import inf
+from telnetlib import IP
 import numpy as np
+import copy
 
 n = int(input())
 A = []
@@ -89,3 +91,48 @@ print(minmax_of_1[0], "-", ",".join(minmax_of_2[1]), sep="")
 
 print("Minmax values and strategy player 2")
 print(minmax_of_2[0], "-", ",".join(minmax_of_1[1]), sep="")
+
+def strongly_dominant_strategy(payoff, player):
+    pnp = np.array(payoff)
+    for i in range(len(payoff)):
+        Payoff = copy.deepcopy(pnp)
+
+        # player 1: row-wise
+        if player == 1:
+            iPayoff = copy.deepcopy(Payoff[i])
+            Payoff = np.delete(Payoff, i, 0)
+        
+        # player 2: col-wise
+        elif player == 2:
+            iPayoff = copy.deepcopy(Payoff[:, i])
+            Payoff = np.delete(Payoff, i, 1)
+
+        isStrongly = True
+        
+        if player == 1:
+            for p in Payoff:
+                # the chosen strategies has to strongly dominate "all other" strategies
+                if (iPayoff > p).all() == True:
+                    pass
+                else:
+                    isStrongly = False
+                    break
+            
+        elif player == 2:
+            c = 0
+            while c != len(Payoff) - 1:
+                p = Payoff[:, c]
+                c += 1
+                if (iPayoff > p).all() == True:
+                    pass
+                else:
+                    isStrongly = False
+                    break
+
+        if isStrongly:
+            return i + 1
+        
+print("Strongly dominant strategy player 1")
+print(strongly_dominant_strategy(A, 1))
+print("Strongly dominant strategy player 2")
+print(strongly_dominant_strategy(B, 2))
