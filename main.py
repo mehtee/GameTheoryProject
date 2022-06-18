@@ -136,3 +136,66 @@ print("Strongly dominant strategy player 1")
 print(strongly_dominant_strategy(A, 1))
 print("Strongly dominant strategy player 2")
 print(strongly_dominant_strategy(B, 2))
+
+
+
+def weakly_dominant_strategy(payoff, player):
+    pnp = np.array(payoff)
+    for i in range(len(payoff)):
+        Payoff = copy.deepcopy(pnp)
+
+        # player 1: row-wise
+        if player == 1:
+            iPayoff = copy.deepcopy(Payoff[i])
+            Payoff = np.delete(Payoff, i, 0)
+        
+        # player 2: col-wise
+        elif player == 2:
+            iPayoff = copy.deepcopy(Payoff[:, i])
+            Payoff = np.delete(Payoff, i, 1)
+
+        isWeakly = True
+        isWeaklyAkidan = False
+        if player == 1:
+            for p in Payoff:
+                # the chosen strategies has to weakly dominate "all other" strategies
+                if (iPayoff >= p).all() == True:
+                    pass
+                else:
+                    isWeakly = False
+                    break
+            if isWeakly:
+                for p in Payoff:
+                    # one of strategies has to be strongly dominated by the chosen strategy
+                    if (iPayoff > p).any() == True:
+                        isWeaklyAkidan = True
+                        break
+            
+
+        elif player == 2:
+            c = 0
+            while c != len(Payoff) - 1:
+                p = Payoff[:, c]
+                c += 1
+                if (iPayoff >= p).all() == True:
+                    pass
+                else:
+                    isWeakly = False
+                    break
+
+            if isWeakly:
+                c = 0
+                while c != len(Payoff) - 1:
+                    p = Payoff[:, c]
+                    c += 1
+                    if (iPayoff > p).any() == True:
+                        isWeaklyAkidan = True
+                        break
+
+        if isWeakly and isWeaklyAkidan:
+            return i + 1
+
+print("Weakly dominant strategy player 1")
+print(weakly_dominant_strategy(A, 1))
+print("Weakly dominant strategy player 2")
+print(weakly_dominant_strategy(B, 2))
