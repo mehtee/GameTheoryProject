@@ -92,9 +92,11 @@ def strongly_dominant_strategy(payoff, player):
             return i + 1
         
 print("Strongly dominant strategy player 1")
-print(strongly_dominant_strategy(A, 1))
+stronglyP1 = strongly_dominant_strategy(A, 1)
+print(stronglyP1)
+stronglyP2 = strongly_dominant_strategy(B, 2)
 print("Strongly dominant strategy player 2")
-print(strongly_dominant_strategy(B, 2))
+print(stronglyP2)
 
 
 
@@ -155,10 +157,23 @@ def weakly_dominant_strategy(payoff, player):
             return i + 1
 
 print("Weakly dominant strategy player 1")
-print(weakly_dominant_strategy(A, 1))
+weaklyP1 = weakly_dominant_strategy(A, 1)
+print(weaklyP1)
 print("Weakly dominant strategy player 2")
-print(weakly_dominant_strategy(B, 2))
+weaklyP2 = weakly_dominant_strategy(B, 2)
+print(weaklyP2)
 
+print("Strogly dominant strategy equilibrium")
+if stronglyP1 != None and stronglyP2 != None:
+    print(stronglyP1,",",stronglyP2, sep="")
+else:
+    print("None")
+    
+print("Weakly dominant strategy equilibrium")
+if weaklyP1 != None and weaklyP2 != None:
+    print(weaklyP1,",",weaklyP2, sep="")
+else:
+    print("None")
 
 def maxmin(payoff, i):
     Anp = np.array(payoff)
