@@ -1,5 +1,3 @@
-from cmath import inf
-from telnetlib import IP
 import numpy as np
 import copy
 
@@ -120,7 +118,7 @@ def strongly_dominant_strategy(payoff, player):
             
         elif player == 2:
             c = 0
-            while c != len(Payoff) - 1:
+            while c != len(Payoff[0]):
                 p = Payoff[:, c]
                 c += 1
                 if (iPayoff > p).all() == True:
@@ -174,7 +172,7 @@ def weakly_dominant_strategy(payoff, player):
 
         elif player == 2:
             c = 0
-            while c != len(Payoff) - 1:
+            while c != len(Payoff[0]):
                 p = Payoff[:, c]
                 c += 1
                 if (iPayoff >= p).all() == True:
@@ -185,7 +183,7 @@ def weakly_dominant_strategy(payoff, player):
 
             if isWeakly:
                 c = 0
-                while c != len(Payoff) - 1:
+                while c != len(Payoff[0]):
                     p = Payoff[:, c]
                     c += 1
                     if (iPayoff > p).any() == True:
@@ -199,3 +197,37 @@ print("Weakly dominant strategy player 1")
 print(weakly_dominant_strategy(A, 1))
 print("Weakly dominant strategy player 2")
 print(weakly_dominant_strategy(B, 2))
+
+def nash_eq(payoff1, payoff2):
+    p1 = np.array(payoff1)
+    c = 0
+    maxes_p1 = []
+    while c != len(p1[0]):
+        max_indices_of_this_col = []
+        col = p1[:, c]
+        c += 1
+        max_value_col = max(col)
+        for i in range(len(col)):
+            if col[i] == max_value_col:
+                max_indices_of_this_col.append(i)
+        maxes_p1.append(max_indices_of_this_col)
+
+    p2 = np.array(payoff2)
+    maxes_p2 = []
+    for row in p2:
+        max_indices_of_this_row = []
+        max_value_row = max(row)
+        for i in range(len(row)):
+            if row[i] == max_value_row:
+                max_indices_of_this_row.append(i)
+        maxes_p2.append(max_indices_of_this_row)
+    
+    for i in range(len(maxes_p2)):
+        row = maxes_p2[i]
+        for j in row:
+            mp2 = maxes_p1[j]
+            if i in mp2:
+                print(i + 1, ",", j + 1, sep="")
+
+print("Pure nash equilibrium")
+nash_eq(A, B)
